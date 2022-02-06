@@ -10,8 +10,6 @@ def main():
 
     data = pd.read_csv('./data.csv')
     data['date'] = data['date'].map(lambda ts: datetime.datetime.strptime(ts, '%m/%d/%Y'))
-
-
     load_dotenv()
     user = os.getenv('POSTGRES_USERNAME')
     password = os.getenv('POSTGRES_PWD')
@@ -22,12 +20,11 @@ def main():
         user=user, host=host,
         password=password
     )
-    # conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cursor = conn.cursor()
     cursor.execute(f"CREATE DATABASE {dbname}")
     engine = create_engine(f'postgresql+psycopg2://{user}:{password}@{host}/{dbname}')
     data.to_sql('open_covid', con=engine)
-
     return 0
 
 if __name__ == '__main__':
