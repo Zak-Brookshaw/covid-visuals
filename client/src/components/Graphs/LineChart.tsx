@@ -1,14 +1,12 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import { DataType } from './Types'
+// import { DataType } from './Types'
 
 type LineChartProps = {
-    data: DataType[],
+    data: any[],
     layout: any
 }
-const LineChart: React.FC<LineChartProps> = ({data, layout}) => {
-
-    
+export const LineChart: React.FC<LineChartProps> = ({data, layout}) => { 
     return(
         <Plot
             data={data}
