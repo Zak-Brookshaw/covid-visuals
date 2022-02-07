@@ -32,10 +32,6 @@ router
     }
 });
 
-
-
-
-
 router
 .get('/get-data', async (req, res, next) => {
     const indepVar = req.query.indepVar;
@@ -53,10 +49,9 @@ router
             const safeColumns = columns.filter(column=>fieldNames.includes(column))  // ensure the columns are in the table
             const text = safeColumns.reduce((pre, cur, index)=>{
                 return index > 0 ? pre + `, ${cur}` : pre + `${cur} `
-            }, "SELECT ").concat(" FROM open_covid ORDER BY date ASC");
+            }, "SELECT ").concat(" FROM open_covid WHERE country_name='Canada' ORDER BY date ASC");
             client.query(text)  // query the database
             .then(response=>{
-
                 // create an array structure: x:[value1, value2, ...]
                 const indepData = indepVar.reduce((prev, cur, index)=>{
                     prev[cur] = response.rows.map((row)=>row[cur]);
@@ -66,6 +61,7 @@ router
                     prev[cur] = response.rows.map((row)=>row[cur]);
                     return prev
                 }, {});
+                console.log(indepData);
                 res.send({
                     indepData,
                     depData

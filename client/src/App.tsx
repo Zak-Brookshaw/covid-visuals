@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Container } from 'react-bootstrap';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Data } from './components/Data';
+// import { Sidebar } from './components/Shared/Sidebar'
 function App() {
   
   return (
@@ -9,8 +11,10 @@ function App() {
         <Route path="/test" element={<>Testing 1, 2, 3</>}/>
         <Route path='/' element={<Data />}>
         </Route>
-      </Routes>      
+      </Routes>  
     </div>
+    
+
   );
 }
 

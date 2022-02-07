@@ -1,6 +1,5 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-// import { DataType } from './Types'
 
 type LineChartProps = {
     data: any[],
