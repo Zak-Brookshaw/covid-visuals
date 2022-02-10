@@ -8,19 +8,30 @@ router
 
     const client = await pool.connect();
     try{
-        const tableInfo = await client.query("SELECT column_name, data_type FROM information_schema.columns WHERE table_name='open_covid'");
-        const columns = tableInfo.rows.reduce((prev, cur)=>{
-            prev[cur.column_name] = cur.data_type;
-            return prev
-        }, {})
-        const countryQuery = {
-            text: "SELECT DISTINCT country_name FROM open_covid",
+        const tableInfo = await client.query("SELECT column_name, data_type FROM information_schema.columns WHERE table_name='open_covid' AND column_name NOT LIKE '%search%' ORDER BY column_name ASC");
+        const locationQuery = {
+            text: "SELECT DISTINCT location_key FROM open_covid ORDER BY location_key",
             rowMode: 'array'
         };
-        const countries = await client.query(countryQuery);
+        const locations = await client.query(locationQuery);
+
+        const locs = locations.rows.reduce((prev, cur) => {
+            const list = cur[0].split('_');
+            const country = list[0];
+            const region = list.length > 1 ? list[1] : null;
+            // prev[country] = prev[country] !== undefined ? [...prev[country], region] : prev[country] = [region];
+            if (prev[country] !== undefined){
+                prev[country] = prev[country].includes(region) ? prev[country] : [...prev[country], region];
+            }
+            else {
+                prev[country] = [region]
+            }
+            return prev
+        }, {})
+        console.log(locs)
         res.send({
-            tableInfo: columns,
-            countries: countries.rows.flat()
+            tableInfo: tableInfo.rows,
+            locations: locs,
         })        
     }
     catch (error){
@@ -28,7 +39,7 @@ router
     }
     finally{
         client.release()
-        console.log("CLIENT RELEASED")  
+        console.log("Client Released")  
     }
 });
 
@@ -36,6 +47,9 @@ router
 .get('/get-data', async (req, res, next) => {
     const indepVar = req.query.indepVar;
     const depVar = req.query.depVar;
+
+    const location_key = req.query.location_key;
+    console.log(depVar);
     const columns = indepVar.concat(depVar);
     pool.connect()
     .then( async (client)=>{
@@ -49,8 +63,8 @@ router
             const safeColumns = columns.filter(column=>fieldNames.includes(column))  // ensure the columns are in the table
             const text = safeColumns.reduce((pre, cur, index)=>{
                 return index > 0 ? pre + `, ${cur}` : pre + `${cur} `
-            }, "SELECT ").concat(" FROM open_covid WHERE country_name='Canada' ORDER BY date ASC");
-            client.query(text)  // query the database
+            }, "SELECT ").concat(" FROM open_covid WHERE location_key=$1 ORDER BY date ASC");
+            client.query({text, values:[location_key]})  // query the database
             .then(response=>{
                 // create an array structure: x:[value1, value2, ...]
                 const indepData = indepVar.reduce((prev, cur, index)=>{
@@ -61,7 +75,6 @@ router
                     prev[cur] = response.rows.map((row)=>row[cur]);
                     return prev
                 }, {});
-                console.log(indepData);
                 res.send({
                     indepData,
                     depData
@@ -84,35 +97,4 @@ router
     })
 });
 
-
 module.exports = router;
-
-///// GRAVEYARD
-// router
-// .get('/data-columns', async(req, res, next) => {
-//     pool.query("SELECT column_name, data_type FROM information_schema.columns WHERE table_name='open_covid'")
-//     .then((response)=> {
-//         res.send({dbInfo: response.rows});
-//     })
-//     .catch((err) => {
-//         res.status(500).send({message: 'Database connection error'})
-//         next(err);
-//     })
-// });
-
-// router
-// .get('/countries', async(req, res, next) =>{
-//     const query = {
-//         text: "SELECT DISTINCT country_name FROM open_covid",
-//         rowMode: 'array'
-//     }
-//     pool.query(query)
-//     .then((response)=>{
-//         res.send({
-//             countries: response.rows.flat()
-//         })
-//     })
-//     .catch(err=>{
-//         next(err)
-//     })
-// });
