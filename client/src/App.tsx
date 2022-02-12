@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { Data } from './components/Data';
+import { Data } from './components/Plot/Data';
 // import { Sidebar } from './components/Shared/Sidebar'
 function App() {
   
