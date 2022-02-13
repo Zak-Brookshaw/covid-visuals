@@ -7,9 +7,17 @@ import os
 from sqlalchemy import create_engine
 
 def main():
+    """
+    Database initialization function
 
+    Returns:
+        (int): classic 'c' format to return 0 on successfull run of program
+    """    
     data = pd.read_csv('./data.csv')
     data['date'] = data['date'].map(lambda ts: datetime.datetime.strptime(ts, '%Y-%m-%d'))
+    for key in data.keys():
+        if data[key].isnull().all():
+            data.drop(columns=[key], inplace=True)
     load_dotenv()
     user = os.getenv('POSTGRES_USERNAME')
     password = os.getenv('POSTGRES_PASSWORD')

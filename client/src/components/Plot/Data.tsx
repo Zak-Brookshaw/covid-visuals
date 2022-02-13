@@ -64,7 +64,7 @@ export const Data = ()=>{
             let side = 'left';
             let position = 0
             if (index > 0){
-                if ((index == 1 && control.tmpDepVar.length == 2) || index == 2){
+                if ((index === 1 && control.tmpDepVar.length === 2) || index === 2){
                     side = 'right';
                     position = 1;
                     

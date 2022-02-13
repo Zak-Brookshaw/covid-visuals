@@ -1,0 +1,1 @@
+from .anova_model import model as a_model

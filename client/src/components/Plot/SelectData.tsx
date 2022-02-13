@@ -53,54 +53,6 @@ export const SelectData: React.FC<YaxisType>  = ({control, setControl, info, dat
 
                     )
                 })}
-                {/* {
-                    control.tmpDepVar.length < 4 ?
-                    <Col xs={2}>
-                    <Form.Label>
-                        Y-axis {control.tmpDepVar.length + 1} [Not Plottted]
-                    </Form.Label>
-                    <Form.Control
-                        as="select"
-                        // value={tableInfo[0].column_name}
-                        onChange={(e)=>{
-                            setControl({
-                                ...control, 
-                                tmpDepVar: [...control.tmpDepVar].concat(e.target.value),
-                                newData: true,
-                            })}}
-                    >
-                        {info.tableInfo.map((row:any)=> {
-                            if (row.column_name !== 'index'){
-                                return (
-                                    <>
-                                        <option>{row.column_name}</option>
-                                    </>
-                                )
-                            }
-                        })}
-                    </Form.Control>
-                </Col>
-                : 
-                null
-                } */}
-
-                {/* <Col className="align-self-end">
-                <Button onClick={async ()=>{
-                    if (control.tmpDepVar.length > 1){
-                        let tmp: string[] = [...control.tmpDepVar];
-                        tmp.pop()
-                        await setControl({
-                            ...control,
-                            tmpDepVar: tmp,
-                            newData: true,
-                        }
-                        )
-
-                    }
-                }}>
-                    <BackspaceFill/>
-                </Button>
-                </Col> */}
                 <Col className="align-self-end d-flex">
                 {
                     control.tmpDepVar.length > 1 ?
@@ -128,17 +80,14 @@ export const SelectData: React.FC<YaxisType>  = ({control, setControl, info, dat
                 }
 
                 {
-                    control.tmpDepVar.length < 4 ?
+                    control.tmpDepVar.length < 4 && !control.tmpDepVar.includes(null) ?
                     // <Col className="align-self-end d-flex" >
-                        <Button onClick={async ()=>{
-                            if (!control.tmpDepVar.includes(null)){
-                                
-                                await setControl({
-                                    ...control,
-                                    tmpDepVar: [...control.tmpDepVar].concat(null),
-                                    // newData: true,
-                                })
-                            }
+                        <Button onClick={async ()=>{  
+                            await setControl({
+                                ...control,
+                                tmpDepVar: [...control.tmpDepVar].concat(null),
+                                // newData: true,
+                            })
                         }}>
                             <PlusCircleFill />
                         </Button>  
