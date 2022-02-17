@@ -5,10 +5,9 @@ type YaxisType = {
     control: any;
     setControl: any;
     info: any;
-    dataChange: any
 }
 
-export const SelectData: React.FC<YaxisType>  = ({control, setControl, info, dataChange}) =>{
+export const SelectData: React.FC<YaxisType>  = ({control, setControl, info}) =>{
     return (
         <>
         <Form 
@@ -16,7 +15,7 @@ export const SelectData: React.FC<YaxisType>  = ({control, setControl, info, dat
             validated={control.valid} 
         >
             <Row 
-            className="mb-3 align-items-end"
+                className="mb-3 align-items-end"
             >
                 {control.tmpDepVar.map((varName: string, index: number) =>{
                     return(

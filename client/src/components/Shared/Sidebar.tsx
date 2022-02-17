@@ -10,6 +10,9 @@ export const Sidebar = () => {
                 <Nav.Item>
                     <Nav.Link href="/">Plotting</Nav.Link>
                 </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link href="/fit">Fitting</Nav.Link>
+                </Nav.Item>
             </Nav>
           
         </>

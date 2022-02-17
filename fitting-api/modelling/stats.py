@@ -14,7 +14,7 @@ def parameter_ci(beta: np.array, var_hat: float, inv_info: np.array, dof: int, f
 
     Returns:
 
-        _type_: _description_
+        beta_stats (dict): dictionary containing the feature's name, parameter value and statistical significance
     """    
     noise_probe = np.sqrt(inv_info.diagonal()*var_hat)
     beta_probe = beta / noise_probe

@@ -54,6 +54,6 @@ def model(df: pd.DataFrame, y_name: str, x_names: list):
     var_hat = sol.fun / dof
     inv_info = np.linalg.inv(info_matrix)
     beta_stats = parameter_ci(beta, var_hat, inv_info, dof, feature_names)
-
-    return beta_stats
+    y_hat = np.matmul(X, beta)
+    return beta_stats, y_hat, mappings
     # return stats, mappings

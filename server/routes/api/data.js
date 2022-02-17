@@ -14,7 +14,6 @@ router
             rowMode: 'array'
         };
         const locations = await client.query(locationQuery);
-
         const locs = locations.rows.reduce((prev, cur) => {
             const list = cur[0].split('_');
             const country = list[0];
