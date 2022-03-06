@@ -29,7 +29,7 @@ export const Fitting = () =>{
             width: 1500,
             height: 700,
             yaxis: {
-                title: 'new recovered'
+                title: 'new recovered residuals'
             }
         },
     });
@@ -53,7 +53,7 @@ export const Fitting = () =>{
                 width: 1500,
                 height: 700,
                 yaxis: {
-                    title: control.tmpDepVar[0].split('_').join(" ")
+                    title: [ ...control.tmpDepVar[0].split('_'), 'residuals'].join(" ")
                 },
                 legend: {
                     x: 1.1,
